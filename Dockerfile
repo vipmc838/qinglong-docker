@@ -103,7 +103,7 @@ run mkdir -p --mode=0755 /usr/share/keyrings
 run curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | tee /usr/share/keyrings/cloudflare-main.gpg >/dev/null
 run echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared any main' | tee /etc/apt/sources.list.d/cloudflared.list
 run apt-get update
-run apt-get install cloudflared
+run apt-get install cloudflared sudo
 
 COPY docker-entrypoint.sh ${QL_DIR}/docker
 COPY sync_data.sh /
@@ -124,6 +124,10 @@ WORKDIR ${QL_DIR}
 
 RUN useradd -m -u 1000 user
 USER user
+
+RUN mkdir -p /etc/sudoers.d && \
+    echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/user && \
+    chmod 0440 /etc/sudoers.d/user
 
 HEALTHCHECK --interval=5s --timeout=2s --retries=20 \
   CMD curl -sf --noproxy '*' http://127.0.0.1:5400/api/health || exit 1
