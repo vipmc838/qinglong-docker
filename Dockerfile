@@ -113,9 +113,6 @@ RUN mkdir -p /ql/data/{config,log,db,scripts,repo,raw,deps} && \
 
 COPY --from=builder /tmp/build/node_modules/. /ql/node_modules/
 
-copy nginx.conf /nginx.conf
-run chmod 777 /nginx.conf
-
 WORKDIR ${QL_DIR}
 
 RUN useradd -m -u 1000 user
