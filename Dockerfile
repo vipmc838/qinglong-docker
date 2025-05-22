@@ -122,6 +122,9 @@ COPY --from=builder /tmp/build/node_modules/. /ql/node_modules/
 
 WORKDIR ${QL_DIR}
 
+copy nginx.conf /nginx.conf
+run chmod 777 /nginx.conf
+
 ARG USERNAME=user
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
