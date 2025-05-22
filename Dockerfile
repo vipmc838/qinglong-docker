@@ -123,11 +123,10 @@ COPY --from=builder /tmp/build/node_modules/. /ql/node_modules/
 WORKDIR ${QL_DIR}
 
 RUN useradd -m -u 1000 user
-USER user
-
 RUN mkdir -p /etc/sudoers.d && \
     echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/user && \
     chmod 0440 /etc/sudoers.d/user
+USER user
 
 HEALTHCHECK --interval=5s --timeout=2s --retries=20 \
   CMD curl -sf --noproxy '*' http://127.0.0.1:5400/api/health || exit 1
