@@ -1,6 +1,4 @@
 #!/bin/bash
-sudo cloudflared service install ${cft}
-
 
 dir_shell=/ql/shell
 . $dir_shell/share.sh
