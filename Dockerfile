@@ -98,6 +98,13 @@ RUN git clone --depth=1 -b ${QL_BRANCH} ${QL_URL} ${QL_DIR} && \
   rm -rf /static && \
   rm -f ${QL_DIR}/docker/docker-entrypoint.sh
 
+
+run mkdir -p --mode=0755 /usr/share/keyrings
+run curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | tee /usr/share/keyrings/cloudflare-main.gpg >/dev/null
+run echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared any main' | tee /etc/apt/sources.list.d/cloudflared.list
+run apt-get update
+run apt-get install cloudflared
+
 COPY docker-entrypoint.sh ${QL_DIR}/docker
 COPY sync_data.sh /
 RUN chmod +x /sync_data.sh
