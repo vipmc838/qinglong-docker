@@ -125,24 +125,9 @@ WORKDIR ${QL_DIR}
 copy nginx.conf /nginx.conf
 run chmod 777 /nginx.conf
 
-ARG USERNAME=user
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
+RUN useradd -m -u 1000 user
+USER user
 
-RUN groupadd --gid $USER_GID $USERNAME && \
-    useradd --uid $USER_UID --gid $USER_GID -m $USERNAME --shell /bin/bash
-
-# 配置 sudoers，允许无密码执行所有命令
-# 创建一个新文件到 /etc/sudoers.d/ 下是推荐的做法，避免直接修改 /etc/sudoers
-RUN mkdir -p /etc/sudoers.d && \
-    echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USERNAME && \
-    chmod 0440 /etc/sudoers.d/$USERNAME
-    
-run chown root:root /usr/bin/sudo
-run chmod 4755 /usr/bin/sudo
-
-# 切换到新创建的非 root 用户
-USER $USERNAME
 
 HEALTHCHECK --interval=5s --timeout=2s --retries=20 \
   CMD curl -sf --noproxy '*' http://127.0.0.1:5400/api/health || exit 1
