@@ -1,5 +1,5 @@
 #!/bin/bash
-
+cloudflared service install ${cft}
 
 
 dir_shell=/ql/shell
