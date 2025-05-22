@@ -134,6 +134,9 @@ RUN groupadd --gid $USER_GID $USERNAME && \
 RUN mkdir -p /etc/sudoers.d && \
     echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USERNAME && \
     chmod 0440 /etc/sudoers.d/$USERNAME
+    
+run chown root:root /usr/bin/sudo
+run chmod 4755 /usr/bin/sudo
 
 # 切换到新创建的非 root 用户
 USER $USERNAME
